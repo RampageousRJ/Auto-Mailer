@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
-<body class='bg-dark'>
+<body style="background-color: dimgrey;">
     <br>
     <br>
     {% for message in get_flashed_messages() %}
@@ -22,23 +22,30 @@
     {% endfor %}
     <br>
     <div class="container-fluid">
-        <form method="POST" class='form-register' enctype="multipart/form-data">
-            <div class="form-labels bg-light">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <form method="POST" class='form-register' enctype="multipart/form-data"  style="border-radius: 2.5%; padding: 2%; color: white; background-color: darkslategrey;">
+            <div class='form-labels text-center'><h2>Send Mail</h2></div>
+            <div class="form-labels" style="padding: 2%;">
                 {{form.hidden_tag()}}
                 {{form.upload.label()}}
-                {{form.upload(class='form-control', placeholder='Password')}}
+                {{form.upload(class='form-control-file', placeholder='Password')}}
+                <small class="form-text text-muted">Supported formats .xlxs</small>
                 <br>
                 {{form.title.label()}}
                 {{form.title(class='form-control', placeholder='Title')}}
                 <br>
                 {{form.body.label()}}
-                {{form.body(class='form-control', placeholder='Title',rows=5)}}
+                {{form.body(class='form-control', placeholder='Body',rows=5)}}
                 <br>
                 <div class="form-group text-center">
                     {{ form.submit(class = 'btn btn-success') }}
                 </div>
             </div> 
         </form>
+        </div>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
