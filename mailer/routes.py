@@ -18,14 +18,14 @@ def home():
             d1=json.loads(json_file)
             for rows in d1.values():
                 for values in rows.values():
-                    if values.__contains__("@"):
+                    if (str(values).__contains__("@") and (str(values).__contains__("gmail.com") or str(values).__contains__(".edu"))):
                         l1.append(values)
             msg = Message(form.title.data,body=form.body.data,sender='sjrj0604@gmail.com',recipients=l1)
             print(l1)
-            # mail.send(msg)
+            mail.send(msg)
             flash('Mail sent!')
             return redirect('home') 
-        except:
+        except Exception:
             flash('Invalid file format!') 
             return redirect('home')
     return render_template('home.html',form=form)
