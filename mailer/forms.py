@@ -9,3 +9,4 @@ class UploadForm(FlaskForm):
     body = TextAreaField("Enter Body ",validators=[DataRequired()])
     recaptcha = RecaptchaField()
     submit = SubmitField("Send Mail")
+    attachments = FileField("Attach Files",validators=[FileAllowed(['png','pdf','jpg','jpeg'],'Allowed: png,jpg,jpeg,pdf')])
