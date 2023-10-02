@@ -11,7 +11,7 @@ import uuid
 @app.route('/',methods=['GET','POST'])
 @app.route('/home',methods=['GET','POST'])
 def home():
-    l1=[]
+    res=[]
     form=UploadForm()
     if request.method=='POST':
         file_req = request.files['upload']
@@ -27,7 +27,11 @@ def home():
             for rows in d1.values():
                 for values in rows.values():
                     if (str(values).__contains__("@") and (str(values).__contains__("gmail.com") or str(values).__contains__(".edu"))):
-                        l1.append(values)
+                        res.append(values)
+            l1=[]
+            for i in res:
+                if i not in l1:
+                    l1.append(i)
             with mail.connect() as conn:
                 for user in l1:
                     msg = Message(form.title.data,body=form.body.data,sender=('Auto-Mailer','automailer.0123@gmail.com'),  recipients=[user])
@@ -35,6 +39,8 @@ def home():
                         with app.open_resource('E:\\Study\\OneDrive - Manipal Academy of Higher Education\\Coding\\Mini-Projects\\Auto-Mailer\\mailer\\static\\attachments\\'+file_names) as fp:
                             msg.attach(file_name,'image/png',fp.read())
                     conn.send(msg)
+            print(len(res))
+            print(len(l1))
             flash('Mail sent!')
             if file_name:
                 os.remove(os.path.join(app.config['UPLOAD_FOLDER'],file_names))
