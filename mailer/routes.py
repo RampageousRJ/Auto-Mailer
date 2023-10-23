@@ -36,7 +36,7 @@ def home():
                 for user in l1:
                     msg = Message(form.title.data,body=form.body.data,sender=('Auto-Mailer','automailer.0123@gmail.com'),  recipients=[user])
                     if file_name:
-                        with app.open_resource('E:\\Study\\OneDrive - Manipal Academy of Higher Education\\Coding\\Mini-Projects\\Auto-Mailer\\mailer\\static\\attachments\\'+file_names) as fp:
+                        with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
                             msg.attach(file_name,'image/png',fp.read())
                     conn.send(msg)
             print(len(res))
