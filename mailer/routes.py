@@ -7,6 +7,7 @@ from flask_mail import Message
 from werkzeug.utils import secure_filename
 import os
 import uuid
+import mimetypes
 
 @app.route('/',methods=['GET','POST'])
 @app.route('/home',methods=['GET','POST'])
@@ -37,10 +38,9 @@ def home():
                     msg = Message(form.title.data,body=form.body.data,sender=('Auto-Mailer','automailer.0123@gmail.com'),  recipients=[user])
                     if file_name:
                         with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
-                            msg.attach(file_name,'image/png',fp.read())
+                            mime_type, encoding = mimetypes.guess_type(file_name)
+                            msg.attach(file_name,mime_type,fp.read())     
                     conn.send(msg)
-            print(len(res))
-            print(len(l1))
             flash('Mail sent!')
             if file_name:
                 os.remove(os.path.join(app.config['UPLOAD_FOLDER'],file_names))
