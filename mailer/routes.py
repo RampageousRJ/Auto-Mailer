@@ -19,23 +19,22 @@ def home():
         attach = request.files['attachments']
         try:
             file = pd.read_excel(file_req)
-            json_file=file.to_json()
-            d1=json.loads(json_file)
             file_name = secure_filename(attach.filename)
             file_names = str(uuid.uuid1()) + "_" + file_name
             if file_name:
                 attach.save(os.path.join(app.config['UPLOAD_FOLDER'], file_names))
-            for rows in d1.values():
-                for values in rows.values():
-                    if (str(values).__contains__("@") and (str(values).__contains__("gmail.com") or str(values).__contains__(".edu"))):
+            for index,row in file.iterrows():
+                for values in row:
+                    if str(values).__contains__("@") and ((str(values).__contains__("gmail.com") or str(values).__contains__(".edu"))):
                         res.append(values)
+                        break
             l1=[]
             for i in res:
                 if i not in l1:
                     l1.append(i)
             with mail.connect() as conn:
                 for user in l1:
-                    msg = Message(form.title.data,body=form.body.data,sender=('Auto-Mailer','automailer.0123@gmail.com'),  recipients=[user])
+                    msg = Message(form.title.data,body=form.body.data,sender=('MIST','automailer.0123@gmail.com'),  recipients=[user])
                     if file_name:
                         with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
                             mime_type, encoding = mimetypes.guess_type(file_name)
