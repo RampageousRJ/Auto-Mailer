@@ -7,7 +7,13 @@ from flask_mail import Message
 from werkzeug.utils import secure_filename
 import os
 import uuid
+import re
 import mimetypes
+
+def validEmail(email_text):
+    if re.match('([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+',email_text) is not None:
+        return True
+    return False
 
 @app.route('/',methods=['GET','POST'])
 @app.route('/home',methods=['GET','POST'])
@@ -25,7 +31,7 @@ def home():
                 attach.save(os.path.join(app.config['UPLOAD_FOLDER'], file_names))
             for index,row in file.iterrows():
                 for values in row:
-                    if str(values).__contains__("@") and (str(values).__contains__("gmail.com") or str(values).__contains__(".edu") or (str(values).__contains__("outlook.com"))):
+                    if validEmail(values):
                         res.append(values)
                         break
             l1=[]
@@ -34,7 +40,7 @@ def home():
                     l1.append(i)
             with mail.connect() as conn:
                 # for user in l1:
-                msg = Message(form.title.data,body=form.body.data,sender=('MIST','automailer.0123@gmail.com'),  recipients=l1)
+                msg = Message(form.title.data,body=form.body.data,sender=('Auto-Mailer','automailer.0123@gmail.com'),  recipients=l1)
                 if file_name:
                     with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
                         mime_type, encoding = mimetypes.guess_type(file_name)

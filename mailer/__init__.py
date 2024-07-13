@@ -14,7 +14,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['RECAPTCHA_PUBLIC_KEY'] = os.getenv('AUTOMAILER_PUBLIC_KEY')
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('AUTOMAILER_PRIVATE_KEY')
-app.config['UPLOAD_FOLDER']=os.getenv('UPLOAD_FOLDER')
+app.config['UPLOAD_FOLDER']=os.path.abspath(os.getcwd())+"\\mailer\\static\\attachments\\"
 mail = Mail(app)
 
 from mailer.routes import *
