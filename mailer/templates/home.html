@@ -33,13 +33,12 @@
                 {{form.upload(class='form-control-file', placeholder='Password')}}
                 <small class="form-text text-muted">Supported formats .xlsx</small>
                 <br>
+                {{form.name.label()}}
+                {{form.name(class='form-control', placeholder='Sender Name')}}
+                <br>
                 {{form.title.label()}}
                 {{form.title(class='form-control', placeholder='Title')}}
                 <br>
-                {{form.attachments.label()}}
-                {{form.attachments(class='form-control-file', placeholder='Password')}}
-                <small class="form-text text-muted">Supported Formats jpg, jpeg, pdf, png, txt</small>
-                <br>  
                 {{form.body.label()}}
                 {{form.body(class='form-control', placeholder='Body',rows=5)}}
                 <br>
