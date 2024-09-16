@@ -22,13 +22,13 @@ def home():
     form=UploadForm()
     if request.method=='POST':
         file_req = request.files['upload']
-        # attach = request.files['attachments']
+        attach = request.files['attachments']
         try:
             file = pd.read_excel(file_req)
-            # file_name = secure_filename(attach.filename)
-            # file_names = str(uuid.uuid1()) + "_" + file_name
-            # if file_name:
-            #     attach.save(os.path.join(app.config['UPLOAD_FOLDER'], file_names))
+            file_name = secure_filename(attach.filename)
+            file_names = str(uuid.uuid1()) + "_" + file_name
+            if file_name:
+                attach.save(os.path.join(app.config['UPLOAD_FOLDER'], file_names))
             for index,row in file.iterrows():
                 for values in row:
                     if validEmail(values):
@@ -41,14 +41,14 @@ def home():
             with mail.connect() as conn:
                 # for user in l1:
                 msg = Message(form.title.data,body=form.body.data,sender=(form.name.data,'automailer.0123@gmail.com'),  recipients=l1)
-                # if file_name:
-                #     with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
-                #         mime_type, encoding = mimetypes.guess_type(file_name)
-                #         msg.attach(file_name,mime_type,fp.read())     
+                if file_name:
+                    with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
+                        mime_type, encoding = mimetypes.guess_type(file_name)
+                        msg.attach(file_name,mime_type,fp.read())     
                 conn.send(msg)
             flash('Mail sent!')
-            # if file_name:
-            #     os.remove(os.path.join(app.config['UPLOAD_FOLDER'],file_names))
+            if file_name:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'],file_names))
             return redirect('home') 
         except Exception as e:
             print(e)
