@@ -4,7 +4,7 @@ stages:
 
 build_job:
     stage: build
-    image: python:latest
+    image: python:slim-buster
     script:
         - pip install -r requirements.txt
 
