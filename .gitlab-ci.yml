@@ -1,0 +1,14 @@
+stages:
+    - build
+    - deploy
+
+build_job:
+    stage: build
+    image: python3.11:latest
+    script:
+        - pip install -r requirements.txt
+
+deploy_stage:
+    stage: deploy
+    script:
+        - curl -X POST -d '{}' $DEPLOY_HOOK
