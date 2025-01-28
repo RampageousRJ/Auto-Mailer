@@ -4,7 +4,7 @@ stages:
 
 build_job:
     stage: build
-    image: python3.11:latest
+    image: python:latest
     script:
         - pip install -r requirements.txt
 
