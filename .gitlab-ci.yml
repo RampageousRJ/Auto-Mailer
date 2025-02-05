@@ -16,8 +16,8 @@ safety_check:
         - pip install safety
         - pip install -r requirements.txt
     script: 
-        - iconv -f ISO-8859-1 -t UTF-8 requirements.txt -o requirements-utf8.txt
-        - safety --key $SAFETY_API_KEY --stage cicd scan -r requirements-utf8.txt
+        - iconv -f UTF-8 -t UTF-8 requirements.txt -o requirements-utf8.txt || true
+        - safety --key $SAFETY_API_KEY --stage cicd scan -r requirements-utf8.txt --output html > safety-report.html
     artifacts:
         paths:
             - safety-report.html
@@ -31,5 +31,6 @@ safety_check:
 
 deploy_stage:
     stage: deploy
+    before_script: apt-get update -y && apt-get install -y curl
     script:
         - curl -X POST -d '{}' $DEPLOY_HOOK
