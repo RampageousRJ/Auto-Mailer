@@ -16,10 +16,7 @@ safety_check:
         - pip install safety
         - pip install -r requirements.txt
     script:
-    - file -bi requirements.txt
-    - iconv -f UTF-16LE -t UTF-8 requirements.txt -o requirements-utf8.txt || { echo "Conversion failed"; exit 1; }
-    - safety --key "$SAFETY_API_KEY" --stage cicd scan --file requirements-utf8.txt --output html > safety-report.html
-    - ls -la safety-report.html
+        - python -m safety --key "$SAFETY_API_KEY" --stage cicd scan --file requirements.txt --output html > safety-report.html
 
     artifacts:
         paths:

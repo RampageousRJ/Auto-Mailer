@@ -9,6 +9,9 @@ __pycache__/
 virt/
 *.pyc
 
+# HTML Outputs
+*.html
+
 # Distribution / packaging
 .Python
 build/
