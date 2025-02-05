@@ -20,6 +20,10 @@ dependency_scan:
     paths:
       - pip-audit-report.json
   allow_failure: true
+  rules:
+      - if: '$SKIP_TEST == "true"'
+        when: never
+      - when: on_success
 
 deploy_stage:
     stage: deploy
