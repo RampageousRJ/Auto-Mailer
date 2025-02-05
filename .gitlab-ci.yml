@@ -12,8 +12,11 @@ build_job:
 
 safety_check:
     stage: scan
-    before_script: pip install safety
-    script: safety check -r requirements.txt --full-report | tee safety-report.html
+    before_script: 
+        - pip install safety
+        - pip install -r requirements.txt
+    script: 
+        - safety --key $SAFETY_API_KEY --stage cicd scan
     artifacts:
         paths:
             - safety-report.html
