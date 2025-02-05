@@ -1,5 +1,5 @@
 include:
-  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - component: $CI_SERVER_FQDN/components/dependency-scanning/main@0.5.0
 
 stages:
     - build
