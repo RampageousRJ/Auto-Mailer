@@ -15,8 +15,7 @@ dependency_scan:
   variables:
     REPORT_PATH: "reports"
   script:
-    - mkdir -p $REPORT_PATH
-    - dependency-check --project "Auto-Mailer" --scan . --format HTML --out reports/ --nvdApiKey "$NVD_API_KEY"
+    - /usr/share/dependency-check/bin/dependency-check.sh --project "Auto-Mailer" --out . --scan . --failOnCVSS 7 --nvdApiKey "$NVD_API_KEY"
 
   artifacts:
     paths:
