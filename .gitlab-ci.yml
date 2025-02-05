@@ -10,16 +10,16 @@ build_job:
     script:
         - pip install -r requirements.txt
 
-dependency_check:
+dependency_scan:
   stage: scan
-  image: owasp/dependency-check:latest
+  variables:
+    REPORT_PATH: "reports"
   script:
-    - echo "Starting with dependency checks..."
-    - dependency-check.sh --project "MyProject" --scan . --format HTML --out reports --nvdApiKey "$NVD_API_KEY"
-    - ls -la reports
+    - mkdir -p $REPORT_PATH
+    - dependency-check.sh --project "Auto-Mailer ($CI_COMMIT_REF_NAME)" --scan . --format HTML --out $REPORT_PATH --nvdApiKey "$NVD_API_KEY"
   artifacts:
     paths:
-      - reports/dependency-check-report.html
+      - $REPORT_PATH/dependency-check-report.html
     when: always
   rules:
     - when: on_success
