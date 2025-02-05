@@ -11,7 +11,7 @@ build_job:
         - pip install -r requirements.txt
 
 dependency-check:
-  stage: dependency-check
+  stage: scan
   image:
     name: owasp/dependency-check:latest
     entrypoint: [""]
