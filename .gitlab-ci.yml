@@ -1,6 +1,3 @@
-include:
-  - component: $CI_SERVER_FQDN/components/dependency-scanning/main@0.5.0
-
 stages:
     - build
     - test
@@ -12,6 +9,17 @@ build_job:
     stage: build
     script:
         - pip install -r requirements.txt
+
+dependency_scan:
+  stage: test
+  image: python:slim-buster
+  script:
+    - pip install pip-audit
+    - pip-audit -r requirements.txt --format json > pip-audit-report.json
+  artifacts:
+    paths:
+      - pip-audit-report.json
+  allow_failure: true
 
 deploy_stage:
     stage: deploy
