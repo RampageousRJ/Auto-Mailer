@@ -10,6 +10,12 @@ build_job:
     script:
         - pip install -r requirements.txt
 
+dependency-check:
+    stage: scan
+    image: owasp/dependency-check
+    script:
+        - /usr/share/dependency-check/bin/dependency-check.sh --project Test --out . --scan . --enableExperimental --failOnCVSS 7
+
 safety_check:
     stage: scan
     before_script: 
@@ -26,7 +32,7 @@ safety_check:
     allow_failure: true
     rules:
         - if: '$SKIP_SAFETY == "true"'
-          when: never
+          when: always
         - when: on_success
     
 deploy_stage:
