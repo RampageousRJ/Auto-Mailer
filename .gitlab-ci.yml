@@ -16,7 +16,8 @@ dependency_scan:
     REPORT_PATH: "reports"
   script:
     - mkdir -p $REPORT_PATH
-    - dependency-check.sh --project "Auto-Mailer ($CI_COMMIT_REF_NAME)" --scan . --format HTML --out $REPORT_PATH --nvdApiKey "$NVD_API_KEY"
+    - dependency-check --project "Auto-Mailer" --scan . --format HTML --out reports/ --nvdApiKey "$NVD_API_KEY"
+
   artifacts:
     paths:
       - $REPORT_PATH/dependency-check-report.html
