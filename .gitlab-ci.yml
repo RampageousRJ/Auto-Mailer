@@ -12,11 +12,11 @@ build_job:
 
 dependency_scan:
   stage: scan
+  image: dependencycheck/dependency-check:latest
   variables:
     REPORT_PATH: "reports"
   script:
-    - /usr/share/dependency-check/bin/dependency-check.sh --project "Auto-Mailer" --out . --scan . --failOnCVSS 7 --nvdApiKey "$NVD_API_KEY"
-
+    - dependency-check.sh --project "Auto-Mailer" --out . --scan . --failOnCVSS 7 --nvdApiKey "$NVD_API_KEY"
   artifacts:
     paths:
       - $REPORT_PATH/dependency-check-report.html
@@ -24,25 +24,6 @@ dependency_scan:
   rules:
     - when: on_success
 
-safety_check:
-    stage: scan
-    before_script: 
-        - pip install safety
-        - pip install -r requirements.txt
-    script:
-    - python -c "import io; f = open('requirements.txt', 'rb').read().decode('utf-16'); open('requirements-utf8.txt', 'w', encoding='utf-8').write(f)" || { echo 'Conversion failed'; exit 1; }
-    - python -m safety --key "$SAFETY_API_KEY" --stage cicd scan --file requirements-utf8.txt --output html > safety-report.html
-    - ls -la safety-report.html
-    artifacts:
-        paths:
-            - safety-report.html
-        when: always
-    allow_failure: true
-    rules:
-        - if: '$SKIP_SAFETY == "true"'
-          when: never
-        - when: on_success
-    
 deploy_stage:
     stage: deploy
     before_script: apt-get update -y && apt-get install -y curl
