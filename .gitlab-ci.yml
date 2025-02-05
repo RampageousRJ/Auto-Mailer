@@ -1,12 +1,24 @@
 stages:
     - build
+    - scan
     - deploy
+
+image: python:slim-buster
 
 build_job:
     stage: build
-    image: python:slim-buster
     script:
         - pip install -r requirements.txt
+
+safety_check:
+    stage: scan
+    before_script: pip install safety
+    script: safety check -r requirements.txt --full-report > safety-report.html
+    artifacts:
+        paths:
+            - safety-report.html
+        when: always
+    
 
 deploy_stage:
     stage: deploy
