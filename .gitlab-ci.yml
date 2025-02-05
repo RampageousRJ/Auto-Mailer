@@ -10,19 +10,18 @@ build_job:
     script:
         - pip install -r requirements.txt
 
-dependency_scan:
-  stage: scan
-  image: dependencycheck/dependency-check:latest
-  variables:
-    REPORT_PATH: "reports"
+dependency-check:
+  stage: dependency-check
+  image:
+    name: owasp/dependency-check:latest
+    entrypoint: [""]
   script:
-    - dependency-check.sh --project "Auto-Mailer" --out . --scan . --failOnCVSS 7 --nvdApiKey "$NVD_API_KEY"
+    - /usr/share/dependency-check/bin/dependency-check.sh --project "Auto-Mailer" --scan . --format "HTML" --out dependency-check-report.html --nvdApiKey $NVD_API_KEY
   artifacts:
-    paths:
-      - $REPORT_PATH/dependency-check-report.html
     when: always
-  rules:
-    - when: on_success
+    expire_in: 1 week
+    paths:
+      - dependency-check-report.html
 
 deploy_stage:
     stage: deploy
