@@ -14,8 +14,9 @@ dependency_check:
   stage: scan
   image: owasp/dependency-check:latest
   script:
-    - dependency-check.sh --project . --scan . --format HTML --out reports --nvd.key "$NVD_API_KEY"
-    - ls -la reports/dependency-check-report.html
+    - echo "Starting with dependency checks..."
+    - dependency-check.sh --project "MyProject" --scan . --format HTML --out reports --nvdApiKey "$NVD_API_KEY"
+    - ls -la reports
   artifacts:
     paths:
       - reports/dependency-check-report.html
