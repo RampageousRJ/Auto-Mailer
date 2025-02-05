@@ -16,10 +16,9 @@ safety_check:
         - pip install safety
         - pip install -r requirements.txt
     script:
-        - iconv -f UTF-16 -t UTF-8 requirements.txt -o requirements-utf8.txt || { echo "Conversion failed"; exit 1; }
+        - iconv -f UTF-16LE -t UTF-8 requirements.txt -o requirements-utf8.txt || { echo "Conversion failed"; exit 1; }
         - python -m safety --key "$SAFETY_API_KEY" --stage cicd scan --file requirements-utf8.txt --output html > safety-report.html
         - ls -la safety-report.html
-
     artifacts:
         paths:
             - safety-report.html
@@ -30,9 +29,12 @@ safety_check:
           when: never
         - when: on_success
     
-
 deploy_stage:
     stage: deploy
     before_script: apt-get update -y && apt-get install -y curl
     script:
         - curl -X POST -d '{}' $DEPLOY_HOOK
+    rules:
+        - if: '$SKIP_DEPLOY == "true"'
+          when: never
+        - when: on_success
