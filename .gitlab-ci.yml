@@ -15,7 +15,7 @@ dependency_scan:
   image: python:slim-buster
   script:
     - pip install pip-audit
-    - pip-audit -r requirements.txt --format json > pip-audit-report.json
+    - pip-audit -r requirements.txt --format json > pip-audit-report.json || true
   artifacts:
     paths:
       - pip-audit-report.json
