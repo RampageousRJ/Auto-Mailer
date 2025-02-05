@@ -13,7 +13,7 @@ build_job:
 safety_check:
     stage: scan
     before_script: pip install safety
-    script: safety check -r requirements.txt --full-report > safety-report.html
+    script: safety check -r requirements.txt --full-report | tee safety-report.html
     artifacts:
         paths:
             - safety-report.html
