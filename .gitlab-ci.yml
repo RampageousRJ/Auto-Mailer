@@ -24,17 +24,6 @@ pip-audit_dependency_scan:
         when: never
       - when: on_success
 
-pyscan_dependency_scan:
-  stage: test
-  script:
-    - pip install pyscan-rs
-    - export PATH="$PATH:/root/.local/bin"
-    - pyscan --json > pyscan-report.json || true
-  artifacts:
-    paths:
-      - pyscan-report.json
-  allow_failure: true
-
 deploy_stage:
     stage: deploy
     before_script: apt-get update -y && apt-get install -y curl
