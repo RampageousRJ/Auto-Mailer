@@ -17,7 +17,7 @@ pip-audit_dependency_scan:
     - pip-audit -r requirements.txt --format json > pip-audit-report.json || true
   artifacts:
     paths:
-      - pip-audit-report.json
+      - files/pip-audit-report.json
   allow_failure: true
   rules:
       - if: '$SKIP_TEST == "true"'
