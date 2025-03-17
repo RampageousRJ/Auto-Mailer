@@ -1,6 +1,7 @@
 stages:
     - build
     - test
+    - sync
     - deploy
 
 image: python:slim-buster
@@ -23,6 +24,15 @@ pip-audit_dependency_scan:
       - if: '$SKIP_TEST == "true"'
         when: never
       - when: on_success
+
+sync_to_github:
+  stage: sync
+  script:
+    - git remote add github https://github.com/RampageousRJ/Auto-Mailer.git
+    - git push github main
+  only:
+    - main
+  allow_failure: true
 
 deploy_stage:
     stage: deploy
