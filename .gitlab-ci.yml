@@ -27,12 +27,15 @@ pip-audit_dependency_scan:
 
 sync_to_github:
   stage: sync
-  script:
-    - git remote add github https://github.com/RampageousRJ/Auto-Mailer.git
+  before_script:
+    - apt-get update && apt-get install -y git
+    - git config --global user.name "RampageousRJ"
+    - git config --global user.email "rishabh.jain1@learner.manipal.edu"
+    - git remote add github https://RampageousRJ:$GITHUB_TOKEN@github.com/RampageousRJ/Auto-Mailer.git
+  script:  
     - git push github main
   only:
     - main
-  allow_failure: true
 
 deploy_stage:
     stage: deploy
