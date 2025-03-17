@@ -3,7 +3,7 @@
 ## Overview
 This project is an **Auto-Mailer** built using Flask and Flask-Mail. It allows users to send bulk emails by uploading an Excel sheet containing recipient email addresses. The app also supports **email attachments** and ensures secure handling of file uploads.
 
-#### Find the pre-deployed version - **[https://auto-mailer-sxh9.onrender.com/home](Auto-Mailer)**.
+#### Find the pre-deployed version - **[Auto-Mailer](https://auto-mailer-sxh9.onrender.com/home)**
 
 
 ## Features
@@ -73,7 +73,7 @@ ATTACHMENT_FOLDER=/tmp/
 ```sh
 $ flask run --host=0.0.0.0 --port=5000
 ```
-App will be available at **[http://localhost:5000](http://localhost:5000)**.
+App will be available at **[http://localhost:5000](http://localhost:5000)**
 
 ## Contributing
 1. **Fork the repository**
