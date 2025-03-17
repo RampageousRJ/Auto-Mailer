@@ -25,10 +25,8 @@ def home():
         attach = request.files['attachments']
         try:
             file = pd.read_excel(file_req)
-            file_name = secure_filename(attach.filename)
-            file_names = str(uuid.uuid1()) + "_" + file_name
-            if file_name:
-                attach.save(os.path.join(app.config['UPLOAD_FOLDER'], file_names))
+            attachment_name = secure_filename(attach.filename)
+            attachment_names = str(uuid.uuid1()) + "_" + attachment_name
             for index,row in file.iterrows():
                 for values in row:
                     if validEmail(values):
@@ -38,17 +36,21 @@ def home():
             for i in res:
                 if i not in l1:
                     l1.append(i)
+            if attachment_name:
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], attachment_names)
+                attach.save(file_path)
+                print(f"File saved at: {file_path}")
             with mail.connect() as conn:
-                # for user in l1:
                 msg = Message(form.title.data,body=form.body.data,sender=(form.name.data,'automailer.0123@gmail.com'),  recipients=l1)
-                if file_name:
-                    with app.open_resource(os.getenv('ATTACHMENT_FOLDER')+file_names) as fp:
-                        mime_type, encoding = mimetypes.guess_type(file_name)
-                        msg.attach(file_name,mime_type,fp.read())     
+                if attachment_name:
+                    with app.open_resource(os.path.join(app.config['UPLOAD_FOLDER'], attachment_names)) as fp:
+                        mime_type, encoding = mimetypes.guess_type(attachment_name)
+                        msg.attach(attachment_name, mime_type or "application/octet-stream", fp.read())    
                 conn.send(msg)
             flash('Mail sent!')
-            if file_name:
-                os.remove(os.path.join(app.config['UPLOAD_FOLDER'],file_names))
+            if attachment_name:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'],attachment_names))
+                print(f"File removed from: {os.path.join(app.config['UPLOAD_FOLDER'],attachment_names)}")
             return redirect('home') 
         except Exception as e:
             print(e)
