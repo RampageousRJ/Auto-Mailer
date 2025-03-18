@@ -33,9 +33,8 @@ sync_to_github:
     - git config --global user.name "RampageousRJ"
     - git config --global user.email "rishabh.jain1@learner.manipal.edu"
     - git remote add github https://RampageousRJ:${GITHUB_TOKEN}@github.com/RampageousRJ/Auto-Mailer.git
+    - git checkout -B main origin/main
     - git remote -v
-    - git fetch --all
-    - git checkout main
     - git push github main
   only:
     - main
