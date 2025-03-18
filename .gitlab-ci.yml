@@ -31,10 +31,13 @@ sync_to_github:
     - apt-get update && apt-get install -y git
     - git config --global user.name "RampageousRJ"
     - git config --global user.email "rishabh.jain1@learner.manipal.edu"
-    - git remote add github https://RampageousRJ:$GITHUB_TOKEN@github.com/RampageousRJ/Auto-Mailer.git
-  script:  
-    - git fetch --all
-    - git push github origin/main
+    - git remote set-url github https://RampageousRJ:$GITHUB_TOKEN@github.com/RampageousRJ/Auto-Mailer.git
+  script:
+    - git fetch --unshallow || true
+    - git checkout main
+    - git add .
+    - git commit -m "Sync changes from GitLab to GitHub" || echo "No changes to commit"
+    - git push github main
   only:
     - main
 
