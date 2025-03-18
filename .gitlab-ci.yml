@@ -27,16 +27,15 @@ pip-audit_dependency_scan:
 
 sync_to_github:
   stage: sync
-  before_script:
+  image: python:slim-buster
+  script:
     - apt-get update && apt-get install -y git
     - git config --global user.name "RampageousRJ"
     - git config --global user.email "rishabh.jain1@learner.manipal.edu"
-    - git remote set-url github https://RampageousRJ:$GITHUB_TOKEN@github.com/RampageousRJ/Auto-Mailer.git
-  script:
-    - git fetch --unshallow || true
+    - git remote add github https://RampageousRJ:${GITHUB_TOKEN}@github.com/RampageousRJ/Auto-Mailer.git
+    - git remote -v
+    - git fetch --all
     - git checkout main
-    - git add .
-    - git commit -m "Sync changes from GitLab to GitHub" || echo "No changes to commit"
     - git push github main
   only:
     - main
