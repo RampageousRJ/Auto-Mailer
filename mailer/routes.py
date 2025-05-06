@@ -28,7 +28,7 @@ def home():
             sanitized_filepath = secure_filename(attach.filename)
             attachment_filename = str(uuid.uuid1()) + "_" + sanitized_filepath
             if sanitized_filepath:
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], attachment_filename)
+                file_path = os.path.join(os.getcwd(),'mailer','static','attachments', attachment_filename)
                 attach.save(file_path)
                 if os.path.exists(file_path):
                     app_logger.info("Attachment uploaded successfully!")
@@ -43,18 +43,20 @@ def home():
             for email in emails:
                 if email not in users:
                     users.append(email)
+            if not users:
+                users.append('sample@example.com')
             with mail.connect() as conn:
                 # for user in users:
                 msg = Message(form.title.data,body=form.body.data,sender=(form.name.data,app.config['MAIL_USERNAME']),  recipients=users)
                 if sanitized_filepath:
-                    with app.open_emailsource(os.path.join(os.getcwd(),'mailer','static','attachments',attachment_filename)) as fp:
+                    with app.open_resource(os.path.join(file_path)) as fp:
                         mime_type, _ = mimetypes.guess_type(sanitized_filepath)
                         msg.attach(sanitized_filepath,mime_type,fp.read())     
                 conn.send(msg)
             flash('Mail sent!')
             app_logger.info("Mail sent successfully!")
             if sanitized_filepath:
-                os.remove(os.path.join(app.config['UPLOAD_FOLDER'],attachment_filename))
+                os.remove(file_path)
             return redirect('home') 
         except Exception as e:
             app_logger.exception("Error occurred while sending mail")
