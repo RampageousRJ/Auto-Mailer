@@ -28,7 +28,7 @@ def home():
             sanitized_filepath = secure_filename(attach.filename)
             attachment_filename = str(uuid.uuid1()) + "_" + sanitized_filepath
             if sanitized_filepath:
-                file_path = os.path.join(os.getcwd(),'mailer','static','attachments', attachment_filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], attachment_filename)
                 attach.save(file_path)
                 if os.path.exists(file_path):
                     app_logger.info("Attachment uploaded successfully!")

@@ -16,7 +16,10 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['RECAPTCHA_PUBLIC_KEY'] = os.getenv('AUTOMAILER_PUBLIC_KEY')
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('AUTOMAILER_PRIVATE_KEY')
-app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()
+if os.getenv('IS_DEPLOYMENT') == 'True':
+    app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()
+else:
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(),'mailer','static','attachments')
 
 mail = Mail(app)
 
