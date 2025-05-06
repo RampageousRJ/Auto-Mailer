@@ -165,3 +165,7 @@ cython_debug/
 #.idea/
 *.exe
 *.pyc
+
+mailer/static/attachments/
+
+*.env
