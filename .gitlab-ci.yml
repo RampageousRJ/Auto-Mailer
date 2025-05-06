@@ -1,0 +1,50 @@
+stages:
+    - build
+    - test
+    - sync
+    - deploy
+
+image: python:slim-buster
+
+build_job:
+    stage: build
+    script:
+        - pip install -r requirements.txt
+
+pip-audit_dependency_scan:
+  stage: test
+  script:
+    - pip install pip-audit
+    - pip-audit -r requirements.txt --format json > pip-audit-report.json || true
+  artifacts:
+    paths:
+      - files/pip-audit-report.json
+  allow_failure: true
+  rules:
+      - if: '$SKIP_TEST == "true"'
+        when: never
+      - when: on_success
+
+sync_to_github:
+  stage: sync
+  image: python:slim-buster
+  script:
+    - apt-get update && apt-get install -y git
+    - git config --global user.name "RampageousRJ"
+    - git config --global user.email "rishabh.jain1@learner.manipal.edu"
+    - git remote add github https://RampageousRJ:${GITHUB_TOKEN}@github.com/RampageousRJ/Auto-Mailer.git
+    - git checkout -B main origin/main
+    - git remote -v
+    - git push github main
+  only:
+    - main
+
+deploy_stage:
+    stage: deploy
+    before_script: apt-get update -y && apt-get install -y curl
+    script:
+        - curl -X POST -d '{}' $DEPLOY_HOOK
+    rules:
+        - if: '$SKIP_DEPLOY == "true"'
+          when: never
+        - when: on_success

@@ -7,7 +7,11 @@ __pycache__/
 # C extensions
 *.so
 virt/
+virtenv/
 *.pyc
+
+# HTML Outputs
+*.html
 
 # Distribution / packaging
 .Python
