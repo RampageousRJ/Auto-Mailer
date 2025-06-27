@@ -173,3 +173,5 @@ cython_debug/
 mailer/static/attachments/
 
 *.env
+
+files/
