@@ -63,3 +63,23 @@ def home():
             flash('Invalid file format!') 
             return redirect('home')
     return render_template('home.html',form=form)
+
+@app.route('/api/send-mail', methods=['POST'])
+def single_mail():
+    data = request.get_json()
+    email = data.get('email')
+    body = data.get('body')
+    name = data.get('name')
+    recipient = data.get('recipient')
+    
+    if not email or not body or not name or not recipient:
+        app_logger.error("Insufficient data provided for sending mail")
+        return {"success": False, "message": "Insufficient Data"}, 404
+    try:
+        msg = Message("Message from your portfolio!", body=f"From: {email}\n\n"+body, sender=(name,email), recipients=[recipient])
+        mail.send(msg)
+        app_logger.info("Mail sent successfully!")
+        return {"success": True, "message": "Mail sent successfully!"}, 200
+    except Exception as e:
+        app_logger.exception(e)
+        return {"success": False, "message": "Failed to send mail!"}, 500
